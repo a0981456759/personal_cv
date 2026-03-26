@@ -1,139 +1,95 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Mail, Send, Linkedin, Github, Twitter, BookOpen, Copy, Check } from "lucide-react";
+import TerminalPrompt from "./TerminalPrompt";
 import { socialLinks, footer } from "@/data/content";
 
 const Contact = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
   const [copiedEmail, setCopiedEmail] = useState(false);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 },
-    },
-  };
-
-  const socialIcons = [
-    { name: "Email", icon: <Mail className="w-6 h-6" />, link: `mailto:${socialLinks.email}`, color: "hover:text-primary-black" },
-    { name: "Telegram", icon: <Send className="w-6 h-6" />, link: socialLinks.telegram, color: "hover:text-primary-black" },
-    { name: "Twitter", icon: <Twitter className="w-6 h-6" />, link: socialLinks.twitter, color: "hover:text-primary-black" },
-    { name: "LinkedIn", icon: <Linkedin className="w-6 h-6" />, link: socialLinks.linkedin, color: "hover:text-primary-black" },
-    { name: "GitHub", icon: <Github className="w-6 h-6" />, link: socialLinks.github, color: "hover:text-primary-black" },
-    { name: "Medium", icon: <BookOpen className="w-6 h-6" />, link: socialLinks.medium, color: "hover:text-primary-black" },
-    { name: "Blog", icon: <BookOpen className="w-6 h-6" />, link: socialLinks.blog, color: "hover:text-primary-black" },
-  ];
-
-  const copyEmailToClipboard = () => {
+  const copyEmail = () => {
     navigator.clipboard.writeText(socialLinks.email);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
+  const links = [
+    { key: "email", value: socialLinks.email, href: `mailto:${socialLinks.email}`, onClick: copyEmail },
+    { key: "telegram", value: "t.me/FinalFantasty", href: socialLinks.telegram },
+    { key: "twitter", value: "x.com/pandazeng1", href: socialLinks.twitter },
+    { key: "linkedin", value: "linkedin.com/in/wei-chieh-tseng", href: socialLinks.linkedin },
+    { key: "github", value: "github.com/panda850819", href: socialLinks.github },
+    { key: "medium", value: "medium.com/@kiss851990", href: socialLinks.medium },
+    { key: "blog", value: "blog.pdzeng.com", href: socialLinks.blog },
+  ];
+
   return (
-    <section id="contact" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-accent-light">
-      <div className="max-w-4xl mx-auto">
+    <section id="contact" ref={ref} className="mb-12">
+      <TerminalPrompt command="cat contact.json" />
+
+      {isInView && (
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="space-y-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="ml-4 mt-2"
         >
-          {/* Section Title */}
-          <motion.div variants={itemVariants} className="text-center">
-            <h2 className="text-4xl sm:text-5xl font-bold font-grotesk mb-4">
-              <span className="text-primary-black">聯絡我</span>
-            </h2>
-            <div className="w-20 h-1 bg-primary-black mx-auto rounded-full"></div>
-            <p className="mt-6 text-lg text-primary-gray max-w-2xl mx-auto">
-              無論是合作機會、產品諮詢，或只是想聊聊天，包含 AI / 生產力 / Web3，都歡迎與我聯繫！
-            </p>
-          </motion.div>
-
-          {/* Email Display */}
-          <motion.div variants={itemVariants} className="text-center">
-            <div className="inline-flex items-center gap-4 bg-white border border-accent-medium rounded-xl px-8 py-4 hover:shadow-soft-lg transition-all duration-300">
-              <Mail className="w-6 h-6 text-primary-black" />
-              <span className="text-xl font-grotesk text-primary-dark">
-                {socialLinks.email}
-              </span>
-              <button
-                onClick={copyEmailToClipboard}
-                className="ml-2 p-2 rounded-lg bg-accent-light hover:bg-accent-medium text-primary-black transition-colors"
-                aria-label="Copy email"
-              >
-                {copiedEmail ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Social Links */}
-          <motion.div variants={itemVariants}>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4">
-              {socialIcons.map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.link}
-                  target={social.name !== "Email" ? "_blank" : undefined}
-                  rel={social.name !== "Email" ? "noopener noreferrer" : undefined}
-                  whileHover={{ y: -5 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`flex flex-col items-center gap-3 p-6 bg-white border border-accent-medium rounded-xl ${social.color} transition-all duration-300 hover:shadow-soft-lg`}
-                >
-                  <div className="text-primary-gray transition-colors">
-                    {social.icon}
-                  </div>
-                  <span className="text-sm font-medium text-primary-gray">
-                    {social.name}
-                  </span>
-                </motion.a>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* CTA */}
-          <motion.div variants={itemVariants} className="text-center pt-8">
-            <a
-              href={`mailto:${socialLinks.email}`}
-              className="inline-block px-8 py-4 bg-primary-black text-white font-bold rounded-lg hover:bg-primary-dark transition-all duration-300 shadow-soft hover:shadow-soft-lg text-lg"
-            >
-              寄信給我
-            </a>
-          </motion.div>
+          <p className="text-text-muted">{"{"}</p>
+          <div className="ml-4 space-y-0.5">
+            {links.map((link, i) => (
+              <p key={link.key}>
+                <span className="text-accent-cyan">&quot;{link.key}&quot;</span>
+                <span className="text-text-secondary">: </span>
+                {link.key === "email" ? (
+                  <button
+                    onClick={link.onClick}
+                    className="text-accent-green hover:underline cursor-pointer"
+                    title="Click to copy"
+                  >
+                    &quot;{link.value}&quot;
+                    {copiedEmail && (
+                      <span className="text-accent-yellow text-xs ml-2">
+                        (copied!)
+                      </span>
+                    )}
+                  </button>
+                ) : (
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="terminal-link"
+                  >
+                    &quot;{link.value}&quot;
+                  </a>
+                )}
+                {i < links.length - 1 && (
+                  <span className="text-text-secondary">,</span>
+                )}
+              </p>
+            ))}
+          </div>
+          <p className="text-text-muted">{"}"}</p>
 
           {/* Footer */}
-          <motion.div variants={itemVariants} className="pt-16 border-t border-accent-medium">
-            <div className="text-center space-y-4">
-              <div className="flex items-center justify-center gap-2 text-2xl">
-                <span>🐼</span>
-                <span className="font-bold text-primary-black">Panda Tseng</span>
-              </div>
-              <p className="text-primary-gray text-sm">
-                {footer.copyright}
-              </p>
-              <p className="text-primary-gray text-xs">
-                {footer.builtWith}
-              </p>
-            </div>
-          </motion.div>
+          <div className="mt-16 pt-6 border-t border-terminal-border">
+            <p className="text-text-muted text-xs">{footer.copyright}</p>
+            <p className="text-text-muted text-xs">{footer.builtWith}</p>
+          </div>
+
+          {/* Static cursor at the end */}
+          <div className="mt-8 flex items-center gap-2">
+            <span className="text-accent-green">$</span>
+            <span className="cursor-blink" />
+          </div>
         </motion.div>
-      </div>
+      )}
+
+      {/* Mobile bottom padding for tab bar */}
+      <div className="h-16 md:hidden" />
     </section>
   );
 };

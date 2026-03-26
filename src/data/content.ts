@@ -198,8 +198,8 @@ export const socialLinks = {
 };
 
 export const footer = {
-  copyright: "© 2025 Panda Tseng. 版權所有。",
-  builtWith: "使用 Next.js、Tailwind CSS 與 Framer Motion 打造",
+  copyright: "© 2025 Panda Tseng. All rights reserved.",
+  builtWith: "Powered by Next.js · Styled like a terminal · Not actually a terminal",
 };
 
 // Education data (can be added to a separate section if needed)
