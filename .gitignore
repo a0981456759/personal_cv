@@ -39,3 +39,10 @@ next-env.d.ts
 # cloudflare
 .wrangler
 wrangler.toml
+
+# screenshots & playwright
+*.png
+.playwright-mcp/
+
+# plans
+docs/superpowers/
