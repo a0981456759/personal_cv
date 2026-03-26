@@ -9,25 +9,45 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#FFFFFF",
-        primary: {
-          black: "#000000",
-          dark: "#1F2937",
-          gray: "#6B7280",
+        terminal: {
+          bg: "#1a1b26",
+          "bg-alt": "#24283b",
+          "bg-highlight": "#292e42",
+          border: "#3b4261",
+        },
+        text: {
+          primary: "#c0caf5",
+          secondary: "#565f89",
+          muted: "#3b4261",
         },
         accent: {
-          light: "#F3F4F6",
-          medium: "#E5E7EB",
-          dark: "#9CA3AF",
+          green: "#9ece6a",
+          cyan: "#7dcfff",
+          yellow: "#e0af68",
+          purple: "#bb9af7",
+          red: "#f7768e",
+          orange: "#ff9e64",
         },
       },
       fontFamily: {
-        sans: ["Inter", "Noto Sans TC", "sans-serif"],
-        grotesk: ["Space Grotesk", "sans-serif"],
+        mono: ['"JetBrains Mono"', '"Noto Sans TC"', "monospace"],
       },
-      boxShadow: {
-        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
-        'soft-lg': '0 10px 40px -10px rgba(0, 0, 0, 0.1)',
+      maxWidth: {
+        terminal: "768px",
+      },
+      animation: {
+        blink: "blink 1s step-end infinite",
+        "fade-in": "fadeIn 0.3s ease-out",
+      },
+      keyframes: {
+        blink: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
       },
     },
   },
