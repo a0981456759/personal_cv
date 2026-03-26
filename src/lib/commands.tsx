@@ -184,9 +184,9 @@ const ContactOutput = () => {
   return (
     <div>
       <p className="text-text-muted">{"{"}</p>
-      <div className="ml-6 space-y-0.5">
+      <div className="space-y-0.5 my-1">
         {links.map((link, i) => (
-          <p key={link.key}>
+          <p key={link.key} className="pl-8">
             <span className="text-accent-cyan">&quot;{link.key}&quot;</span>
             <span className="text-text-secondary">: </span>
             <a
