@@ -1,6 +1,6 @@
 export const personalInfo = {
   name: "Panda Tseng",
-  title: "自媒體創作者 · 區塊鏈愛好者",
+  title: "營運管理 | 軟體開發",
   tagline: "連結真實與虛擬世界的資訊鴻溝",
   avatar: "/avatar.png",
   bio: "2018 年開始投入加密貨幣領域，透過自媒體分享關於 AI、生產力工具、Web3 與區塊鏈的見解，致力於將複雜的科技概念轉化為易懂的內容。",
