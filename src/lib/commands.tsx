@@ -57,12 +57,12 @@ const WhoamiOutput = () => (
 );
 
 const SoulOutput = () => (
-  <div className="space-y-3">
+  <div className="space-y-4">
     <p className="text-accent-purple font-bold"># {about.headline}</p>
     {about.description.map((p, i) => (
       <p key={i} className="text-text-primary leading-relaxed">{p}</p>
     ))}
-    <div className="space-y-1 mt-2">
+    <div className="space-y-2 mt-4">
       <p className="text-accent-purple font-bold">## Highlights</p>
       {about.highlights.map((h, i) => (
         <p key={i} className="text-text-primary">
@@ -74,9 +74,13 @@ const SoulOutput = () => (
 );
 
 const ExperienceOutput = () => (
-  <div className="space-y-4">
+  <div className="space-y-2">
     {experiences.map((exp, index) => (
-      <div key={index} className="space-y-0.5">
+      <div key={index}>
+        {index > 0 && (
+          <div className="border-t border-terminal-border/30 my-5" />
+        )}
+        <div className="space-y-0.5">
         <p className="text-text-muted">{"{"}</p>
         <div className="ml-4 space-y-0.5">
           <p><span className="text-accent-cyan">&quot;company&quot;</span><span className="text-text-secondary">: </span><span className="text-accent-green">&quot;{exp.company}&quot;</span><span className="text-text-secondary">,</span></p>
@@ -93,6 +97,7 @@ const ExperienceOutput = () => (
           <p><span className="text-accent-cyan">&quot;tags&quot;</span><span className="text-text-secondary">: [</span>{exp.tags.map((t, i) => (<span key={i}><span className="text-accent-yellow">&quot;{t}&quot;</span>{i < exp.tags.length - 1 && <span className="text-text-secondary">, </span>}</span>))}<span className="text-text-secondary">]</span></p>
         </div>
         <p className="text-text-muted">{"}"}</p>
+        </div>
       </div>
     ))}
   </div>
@@ -102,21 +107,26 @@ const ProjectsOutput = () => (
   <div className="space-y-4">
     <p className="text-text-secondary text-sm">total {projects.length}</p>
     {projects.map((project, index) => (
-      <div key={index} className="space-y-2">
-        <p className="text-sm">
-          <span className="text-accent-green">drwxr-xr-x</span>
-          <span className="text-text-secondary">  panda  </span>
-          <span className="text-accent-cyan font-bold">{project.name}/</span>
-        </p>
-        <div className="ml-4">
-          <p className="text-text-primary mb-2">{project.description}</p>
-          {project.highlights.map((h, i) => (
-            <p key={i} className="text-text-secondary text-sm"><span className="text-accent-green">+</span> {h}</p>
-          ))}
-          <div className="flex flex-wrap gap-2 mt-2">
-            {project.tags.map((tag, i) => (
-              <span key={i} className="terminal-tag">{tag}</span>
+      <div key={index}>
+        {index > 0 && (
+          <div className="border-t border-terminal-border/30 my-5" />
+        )}
+        <div className="space-y-2">
+          <p className="text-sm">
+            <span className="text-accent-green">drwxr-xr-x</span>
+            <span className="text-text-secondary">  panda  </span>
+            <span className="text-accent-cyan font-bold">{project.name}/</span>
+          </p>
+          <div className="ml-4">
+            <p className="text-text-primary mb-2">{project.description}</p>
+            {project.highlights.map((h, i) => (
+              <p key={i} className="text-text-secondary text-sm"><span className="text-accent-green">+</span> {h}</p>
             ))}
+            <div className="flex flex-wrap gap-2 mt-2">
+              {project.tags.map((tag, i) => (
+                <span key={i} className="terminal-tag">{tag}</span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -125,31 +135,31 @@ const ProjectsOutput = () => (
 );
 
 const AchievementsOutput = () => (
-  <div className="space-y-4">
+  <div className="space-y-8">
     {achievements.map((category, ci) => (
-      <div key={ci} className="space-y-2">
+      <div key={ci} className="space-y-3">
         <p className="text-accent-purple font-bold">## {category.category}</p>
         <div className="overflow-x-auto">
           <table className="text-sm w-full">
             <thead>
               <tr className="text-text-secondary border-b border-terminal-border">
-                <th className="text-left pr-4 py-1 font-normal">TITLE</th>
-                <th className="text-left pr-4 py-1 font-normal">COMPETITION</th>
-                <th className="text-left pr-4 py-1 font-normal">YEAR</th>
-                <th className="text-left py-1 font-normal">LOCATION</th>
+                <th className="text-left pr-4 py-1.5 font-normal">TITLE</th>
+                <th className="text-left pr-4 py-1.5 font-normal">COMPETITION</th>
+                <th className="text-left pr-4 py-1.5 font-normal">YEAR</th>
+                <th className="text-left py-1.5 font-normal">LOCATION</th>
               </tr>
             </thead>
             <tbody>
               {category.awards.map((award, ai) => (
                 <tr key={ai} className="border-b border-terminal-border/30">
-                  <td className="pr-4 py-1.5 text-accent-yellow font-bold whitespace-nowrap">{award.title}</td>
-                  <td className="pr-4 py-1.5 text-text-primary">
+                  <td className="pr-4 py-2 text-accent-yellow font-bold whitespace-nowrap">{award.title}</td>
+                  <td className="pr-4 py-2 text-text-primary">
                     {"link" in award && award.link ? (
                       <a href={award.link} target="_blank" rel="noopener noreferrer" className="terminal-link">{award.competition}</a>
                     ) : award.competition}
                   </td>
-                  <td className="pr-4 py-1.5 text-accent-orange whitespace-nowrap">{award.year}</td>
-                  <td className="py-1.5 text-text-secondary whitespace-nowrap">{award.location}</td>
+                  <td className="pr-4 py-2 text-accent-orange whitespace-nowrap">{award.year}</td>
+                  <td className="py-2 text-text-secondary whitespace-nowrap">{award.location}</td>
                 </tr>
               ))}
             </tbody>
@@ -174,7 +184,7 @@ const ContactOutput = () => {
   return (
     <div>
       <p className="text-text-muted">{"{"}</p>
-      <div className="ml-4 space-y-0.5">
+      <div className="space-y-0.5 my-1 ml-6">
         {links.map((link, i) => (
           <p key={link.key}>
             <span className="text-accent-cyan">&quot;{link.key}&quot;</span>
@@ -197,10 +207,10 @@ const ContactOutput = () => {
 };
 
 const EducationOutput = () => (
-  <div className="space-y-3">
+  <div className="space-y-4">
     <p className="text-accent-purple font-bold"># Education</p>
     {education.map((edu, i) => (
-      <div key={i} className="space-y-0.5 ml-2">
+      <div key={i} className="space-y-1 ml-2">
         <p className="text-text-primary font-bold">{edu.school}</p>
         <p className="text-accent-cyan">{edu.degree} &mdash; {edu.major}</p>
         <p className="text-text-secondary text-sm">{edu.period} | {edu.location}</p>

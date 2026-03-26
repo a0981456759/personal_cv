@@ -3,76 +3,117 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CommandInput, { CommandInputHandle } from "./CommandInput";
-import { executeCommand, CommandOutput } from "@/lib/commands";
+import PanelBorder from "./PanelBorder";
+import PanelSidebar, { FILE_TREE } from "./PanelSidebar";
+import PanelContent from "./PanelContent";
+import PanelInfo from "./PanelInfo";
+import { executeCommand } from "@/lib/commands";
 import { BOOT_LINES } from "@/lib/ascii";
 
-type TerminalLine = {
+type PanelFocus = "sidebar" | "content" | "command";
+
+type BootLine = {
   id: number;
-  type: "boot" | "command" | "system";
-  text?: string;
-  color?: string;
-  command?: string;
-  output?: React.ReactNode;
-  content?: React.ReactNode;
+  text: string;
+  color: string;
 };
 
-const CHIP_COMMANDS = ["whoami", "cat soul.md", "cat experience.json", "ls projects/", "cat skills.md", "cat contact.json"];
-
-const CommandChips = ({ onCommandClick }: { onCommandClick: (cmd: string) => void }) => (
-  <div className="flex flex-wrap gap-2 py-3">
-    {CHIP_COMMANDS.map((cmd) => (
-      <button
-        key={cmd}
-        onClick={() => onCommandClick(cmd)}
-        className="px-3 py-1.5 text-xs bg-terminal-bg-alt text-accent-cyan border border-terminal-border rounded hover:border-accent-cyan/50 transition-colors cursor-pointer"
-      >
-        {cmd}
-      </button>
-    ))}
-  </div>
-);
+const FOCUS_ORDER: PanelFocus[] = ["sidebar", "content", "command"];
 
 const Terminal = () => {
   const [phase, setPhase] = useState<"boot" | "ready">("boot");
-  const [lines, setLines] = useState<TerminalLine[]>([]);
+  const [bootLines, setBootLines] = useState<BootLine[]>([]);
   const [bootIndex, setBootIndex] = useState(0);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const [focusedPanel, setFocusedPanel] = useState<PanelFocus>("sidebar");
+  const [selectedFileIndex, setSelectedFileIndex] = useState(0);
+  const [mobileTab, setMobileTab] = useState<"files" | "content">("files");
   const inputRef = useRef<CommandInputHandle>(null);
   const lineIdRef = useRef(0);
 
   const nextId = () => lineIdRef.current++;
 
-  const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
-    bottomRef.current?.scrollIntoView({ behavior });
-  }, []);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [lines, scrollToBottom]);
-
-  // handleCommand needs to be defined with useCallback before the boot effect uses it.
-  // We use a ref to break the circular dependency.
   const handleCommandRef = useRef<(input: string) => void>(() => {});
+
+  // Derive content from selected file
+  const selectedFile = FILE_TREE[selectedFileIndex];
+  const contentResult = executeCommand(selectedFile.command, handleCommandRef.current);
 
   const handleCommand = useCallback((input: string) => {
     const trimmed = input.trim().toLowerCase();
 
-    if (trimmed === "clear") {
-      setLines([]);
+    if (trimmed === "clear") return;
+
+    // Check if command matches a file in the tree
+    const fileIndex = FILE_TREE.findIndex(
+      (f) => f.command.toLowerCase() === trimmed
+    );
+    if (fileIndex !== -1) {
+      setSelectedFileIndex(fileIndex);
+      setFocusedPanel("content");
+      setMobileTab("content");
       return;
     }
 
-    const result: CommandOutput | null = executeCommand(input, handleCommandRef.current);
+    // For non-file commands (help, whoami, sudo hire-panda), show in content panel
+    const result = executeCommand(input, handleCommandRef.current);
     if (result) {
-      setLines((prev) => [
-        ...prev,
-        { id: nextId(), type: "command" as const, command: result.command, output: result.output },
-      ]);
+      setFocusedPanel("content");
+      setMobileTab("content");
     }
   }, []);
 
-  // Keep the ref in sync
   handleCommandRef.current = handleCommand;
+
+  const handleFileSelect = useCallback((index: number) => {
+    setSelectedFileIndex(index);
+    setMobileTab("content");
+  }, []);
+
+  // Tab cycling for panel focus
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (phase !== "ready") return;
+
+      // Tab cycles focus (only when not in command input)
+      if (e.key === "Tab" && !e.ctrlKey && !e.metaKey) {
+        const activeEl = document.activeElement;
+        const isInInput = activeEl?.tagName === "INPUT";
+
+        if (!isInInput || focusedPanel === "command") {
+          e.preventDefault();
+          const currentIdx = FOCUS_ORDER.indexOf(focusedPanel);
+          const nextIdx = e.shiftKey
+            ? (currentIdx - 1 + FOCUS_ORDER.length) % FOCUS_ORDER.length
+            : (currentIdx + 1) % FOCUS_ORDER.length;
+          const next = FOCUS_ORDER[nextIdx];
+          setFocusedPanel(next);
+          if (next === "command") {
+            inputRef.current?.focus();
+          }
+        }
+      }
+
+      // Number keys 1-7 jump to file
+      const num = parseInt(e.key);
+      if (num >= 1 && num <= FILE_TREE.length && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const activeEl = document.activeElement;
+        if (activeEl?.tagName !== "INPUT") {
+          setSelectedFileIndex(num - 1);
+          setFocusedPanel("sidebar");
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [phase, focusedPanel]);
+
+  // Focus command input when panel switches to command
+  useEffect(() => {
+    if (focusedPanel === "command" && phase === "ready") {
+      inputRef.current?.focus();
+    }
+  }, [focusedPanel, phase]);
 
   // Boot sequence
   useEffect(() => {
@@ -80,84 +121,164 @@ const Terminal = () => {
 
     if (bootIndex < BOOT_LINES.length) {
       const timer = setTimeout(() => {
-        setLines((prev) => [
+        setBootLines((prev) => [
           ...prev,
-          { id: nextId(), type: "boot", text: BOOT_LINES[bootIndex].text, color: BOOT_LINES[bootIndex].color },
+          { id: nextId(), text: BOOT_LINES[bootIndex].text, color: BOOT_LINES[bootIndex].color },
         ]);
         setBootIndex((i) => i + 1);
-        scrollToBottom("instant");
       }, BOOT_LINES[bootIndex].delay);
       return () => clearTimeout(timer);
     } else {
       const timer = setTimeout(() => {
-        const whoamiResult = executeCommand("whoami", handleCommandRef.current);
-        const helpResult = executeCommand("help", handleCommandRef.current);
-
-        const newLines: TerminalLine[] = [];
-        if (whoamiResult) {
-          newLines.push({ id: nextId(), type: "command" as const, command: "whoami", output: whoamiResult.output });
-        }
-        if (helpResult) {
-          newLines.push({ id: nextId(), type: "command" as const, command: "help", output: helpResult.output });
-        }
-        newLines.push({
-          id: nextId(),
-          type: "system" as const,
-          content: <CommandChips onCommandClick={handleCommandRef.current} />,
-        });
-
-        setLines((prev) => [...prev, ...newLines]);
         setPhase("ready");
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [phase, bootIndex, scrollToBottom]);
+  }, [phase, bootIndex]);
 
-  const handleContainerClick = useCallback(() => {
-    inputRef.current?.focus();
-  }, []);
+  // Boot screen
+  if (phase === "boot") {
+    return (
+      <div className="min-h-[calc(100vh-52px)] flex items-center justify-center">
+        <div className="space-y-1 font-mono text-sm">
+          <AnimatePresence>
+            {bootLines.map((line) => (
+              <motion.p
+                key={line.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.15 }}
+                className={line.color}
+              >
+                {line.text}
+              </motion.p>
+            ))}
+          </AnimatePresence>
+        </div>
+      </div>
+    );
+  }
 
+  // Panel layout
   return (
-    <div
-      className="min-h-[calc(100vh-52px)] flex flex-col"
-      onClick={handleContainerClick}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col h-[calc(100vh-52px)]"
     >
-      {/* Output area */}
-      <div className="flex-1 space-y-6" role="log" aria-live="polite">
-        <AnimatePresence>
-          {lines.map((line, i) => (
-            <motion.div
-              key={line.id}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
+      {/* Desktop layout */}
+      <div className="hidden md:flex flex-1 gap-0 p-3 min-h-0">
+        {/* Sidebar */}
+        <div className="w-52 shrink-0">
+          <PanelBorder
+            title="Files"
+            focused={focusedPanel === "sidebar"}
+            className="h-full cursor-pointer"
+          >
+            <div onClick={() => setFocusedPanel("sidebar")}>
+              <PanelSidebar
+                selectedIndex={selectedFileIndex}
+                onSelect={handleFileSelect}
+                focused={focusedPanel === "sidebar"}
+              />
+            </div>
+          </PanelBorder>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 ml-3 min-w-0">
+          <PanelBorder
+            title="Content"
+            focused={focusedPanel === "content"}
+            className="h-full cursor-pointer"
+          >
+            <div
+              className="h-full"
+              onClick={() => setFocusedPanel("content")}
             >
-              {line.type === "boot" && (
-                <p className={`${line.color} text-sm`}>{line.text}</p>
+              {contentResult && (
+                <PanelContent
+                  command={contentResult.command}
+                  output={contentResult.output}
+                  focused={focusedPanel === "content"}
+                />
               )}
-              {line.type === "command" && (
-                <div className={`space-y-2 ${i > 0 ? "border-t border-terminal-border/20 pt-4" : ""}`}>
-                  <div className="flex items-center gap-2 font-mono">
-                    <span className="text-accent-green">$</span>
-                    <span className="text-text-primary">{line.command}</span>
-                  </div>
-                  <div className="ml-4">{line.output}</div>
-                </div>
-              )}
-              {line.type === "system" && (
-                <div>{line.content}</div>
-              )}
-            </motion.div>
-          ))}
-        </AnimatePresence>
-        <div ref={bottomRef} />
+            </div>
+          </PanelBorder>
+        </div>
+      </div>
+
+      {/* Mobile layout */}
+      <div className="flex md:hidden flex-col flex-1 min-h-0">
+        {/* Tab switcher */}
+        <div className="flex border-b border-terminal-border">
+          <button
+            onClick={() => { setMobileTab("files"); setFocusedPanel("sidebar"); }}
+            className={`flex-1 py-2 text-xs font-mono text-center transition-colors cursor-pointer ${
+              mobileTab === "files"
+                ? "text-accent-cyan border-b-2 border-accent-cyan"
+                : "text-text-secondary"
+            }`}
+          >
+            Files
+          </button>
+          <button
+            onClick={() => { setMobileTab("content"); setFocusedPanel("content"); }}
+            className={`flex-1 py-2 text-xs font-mono text-center transition-colors cursor-pointer ${
+              mobileTab === "content"
+                ? "text-accent-cyan border-b-2 border-accent-cyan"
+                : "text-text-secondary"
+            }`}
+          >
+            Content
+          </button>
+        </div>
+
+        {/* Mobile content area */}
+        <div className="flex-1 overflow-y-auto p-3">
+          {mobileTab === "files" ? (
+            <PanelSidebar
+              selectedIndex={selectedFileIndex}
+              onSelect={(i) => {
+                handleFileSelect(i);
+                setMobileTab("content");
+              }}
+              focused={true}
+            />
+          ) : (
+            contentResult && (
+              <PanelContent
+                command={contentResult.command}
+                output={contentResult.output}
+                focused={true}
+              />
+            )
+          )}
+        </div>
+      </div>
+
+      {/* Info bar */}
+      <div className="shrink-0">
+        <PanelBorder title="Info" focused={false} className="mx-3 mb-1">
+          <PanelInfo />
+        </PanelBorder>
       </div>
 
       {/* Command input */}
-      <div className="sticky bottom-0 bg-terminal-bg pt-2 pb-4 md:pb-2">
-        <CommandInput ref={inputRef} onSubmit={handleCommand} disabled={phase !== "ready"} />
+      <div className="shrink-0 px-3 pb-3">
+        <div onClick={() => setFocusedPanel("command")}>
+          <CommandInput
+            ref={inputRef}
+            onSubmit={handleCommand}
+            disabled={phase !== "ready"}
+          />
+        </div>
+        <div className="text-text-muted text-[10px] font-mono mt-1 px-1">
+          Tab: switch panel | 1-7: jump to file | type command + Enter
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
