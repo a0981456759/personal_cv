@@ -1,15 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk, Noto_Sans_TC } from "next/font/google";
+import { JetBrains_Mono, Noto_Sans_TC } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-jetbrains-mono",
 });
 
 const notoSansTC = Noto_Sans_TC({
@@ -19,13 +14,13 @@ const notoSansTC = Noto_Sans_TC({
 });
 
 export const metadata: Metadata = {
-  title: "Panda Tseng | Crypto PM · Builder · KOL",
-  description: "Building the bridge between TradFi & Web3. Explore my journey from $500 to a million-dollar portfolio.",
+  title: "panda@cv ~ %",
+  description: "Panda Tseng | Crypto PM, Builder, KOL — Terminal CV",
   keywords: ["Web3", "Crypto", "Product Manager", "DeFi", "Blockchain", "KOL"],
   authors: [{ name: "Panda Tseng" }],
   openGraph: {
-    title: "Panda Tseng | Crypto PM · Builder · KOL",
-    description: "Building the bridge between TradFi & Web3",
+    title: "panda@cv ~ % whoami",
+    description: "Panda Tseng — Building the bridge between TradFi & Web3",
     type: "website",
   },
 };
@@ -36,10 +31,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-TW" className={`${inter.variable} ${spaceGrotesk.variable} ${notoSansTC.variable}`}>
-      <body className="font-sans">
-        {children}
-      </body>
+    <html lang="zh-TW" className={`${jetbrainsMono.variable} ${notoSansTC.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }
