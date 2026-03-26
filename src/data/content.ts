@@ -12,10 +12,10 @@ export const about = {
   description: [
     "你好！我是來自台灣的 Panda Tseng，一位橫跨營運管理與軟體開發的跨界工作者。",
     "擁有資訊管理碩士背景與全端開發經驗，自 2017 年起深耕 Web3 產業，從工程師一路走到營運管理，擅長用技術思維優化團隊運作與產品流程。",
-    "目前在 TONX 負責人員與營運管理，同時持續透過 WalkinCat 走路貓分享 AI、生產力工具與 Web3 相關內容。",
+    "曾在 TONX 擔任 People & Ops Lead，同時持續透過 WalkinCat 走路貓分享 AI、生產力工具與 Web3 相關內容。",
   ],
   highlights: [
-    "TONX People & Ops Lead，統籌團隊運作與財務會計",
+    "前 TONX People & Ops Lead，統籌團隊運作與財務會計",
     "全端開發者，具備 iOS、後端及區塊鏈整合經驗",
     "多項區塊鏈與 iOS 競賽獎項，包括國際區塊鏈奧林匹亞亞軍",
   ],
@@ -25,7 +25,7 @@ export const experiences = [
   {
     company: "TONX",
     position: "People & Ops Lead",
-    period: "2025/07 - 現在",
+    period: "2025/07 - 2025/12",
     location: "混合型",
     description: "負責 TONX 的人員與營運管理，統籌團隊運作與財務會計工作。",
     achievements: [
