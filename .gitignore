@@ -46,3 +46,6 @@ wrangler.toml
 
 # plans
 docs/superpowers/
+
+# worktrees
+.worktrees/
