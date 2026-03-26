@@ -24,17 +24,17 @@ const HelpOutput = ({ onCommandClick }: { onCommandClick?: (cmd: string) => void
   return (
     <div className="space-y-3">
       <p className="text-accent-purple font-bold">Available commands:</p>
-      <div className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1">
+      <div className="space-y-1">
         {commands.map(({ cmd, desc }) => (
-          <React.Fragment key={cmd}>
+          <div key={cmd} className="flex gap-2">
             <button
               onClick={() => onCommandClick?.(cmd)}
-              className="text-left text-accent-cyan hover:underline cursor-pointer"
+              className="text-left text-accent-cyan hover:underline cursor-pointer shrink-0 min-w-[180px]"
             >
               {cmd}
             </button>
             <span className="text-text-secondary">&mdash; {desc}</span>
-          </React.Fragment>
+          </div>
         ))}
       </div>
       <p className="text-text-muted text-xs mt-2">
@@ -210,7 +210,7 @@ const EducationOutput = () => (
 );
 
 const SkillsOutput = () => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px 32px" }}>
     {skills.map((category, i) => (
       <div key={i} className="space-y-1">
         <p className="text-accent-purple font-bold">{category.category}:</p>
