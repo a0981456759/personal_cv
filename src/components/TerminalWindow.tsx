@@ -7,16 +7,14 @@ interface TerminalWindowProps {
 const TerminalWindow = ({ children }: TerminalWindowProps) => {
   return (
     <div className="min-h-screen bg-terminal-bg">
-      {/* Window Chrome - Title Bar */}
+      {/* Window Chrome */}
       <div className="sticky top-0 z-50 bg-terminal-bg-alt border-b border-terminal-border">
         <div className="max-w-terminal mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
-          {/* Traffic Light Dots */}
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded-full bg-accent-red/80" />
             <div className="w-3 h-3 rounded-full bg-accent-yellow/80" />
             <div className="w-3 h-3 rounded-full bg-accent-green/80" />
           </div>
-          {/* Title */}
           <span className="text-text-secondary text-xs ml-2">
             panda@cv — zsh — 80x24
           </span>
@@ -24,7 +22,7 @@ const TerminalWindow = ({ children }: TerminalWindowProps) => {
       </div>
 
       {/* Terminal Content */}
-      <div className="max-w-terminal mx-auto px-4 sm:px-6 py-8">
+      <div className="max-w-terminal mx-auto px-4 sm:px-6 py-6">
         {children}
       </div>
     </div>
