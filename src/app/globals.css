@@ -3,25 +3,56 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-background text-primary-dark antialiased;
-  }
-
   html {
     scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-terminal-bg text-text-primary antialiased font-mono;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  ::selection {
+    @apply bg-accent-purple/30 text-text-primary;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-terminal-bg;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-terminal-border rounded;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-text-secondary;
   }
 }
 
 @layer utilities {
-  .text-accent {
-    @apply text-primary-black;
+  .terminal-prompt {
+    @apply text-accent-green font-mono;
   }
 
-  .card-hover {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg;
+  .terminal-command {
+    @apply text-text-primary font-mono;
   }
 
-  .border-subtle {
-    @apply border border-accent-medium;
+  .terminal-comment {
+    @apply text-text-secondary font-mono italic;
+  }
+
+  .terminal-link {
+    @apply text-accent-cyan underline underline-offset-2 decoration-accent-cyan/40 hover:decoration-accent-cyan transition-colors;
+  }
+
+  .terminal-tag {
+    @apply inline-block px-2 py-0.5 text-xs bg-terminal-bg-alt text-accent-yellow border border-terminal-border rounded;
+  }
+
+  .cursor-blink {
+    @apply inline-block w-2 h-4 bg-accent-green animate-blink ml-1;
   }
 }
