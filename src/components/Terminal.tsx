@@ -16,7 +16,7 @@ type TerminalLine = {
   content?: React.ReactNode;
 };
 
-const CHIP_COMMANDS = ["whoami", "cat soul.md", "cat experience.json", "ls projects/", "cat skills.yaml", "cat contact.json"];
+const CHIP_COMMANDS = ["whoami", "cat soul.md", "cat experience.json", "ls projects/", "cat skills.md", "cat contact.json"];
 
 const CommandChips = ({ onCommandClick }: { onCommandClick: (cmd: string) => void }) => (
   <div className="flex flex-wrap gap-2 py-3">

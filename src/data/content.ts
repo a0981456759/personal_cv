@@ -131,15 +131,70 @@ export const experiences = [
 // Featured Projects - Real projects and products
 export const projects = [
   {
+    name: "Murmur Voice",
+    description: "Privacy-first voice-to-text for macOS/Windows. Local Whisper (Metal/CUDA) or Groq cloud, with LLM post-processing.",
+    image: "/projects/murmur.png",
+    tags: ["Rust", "Tauri 2", "Whisper", "macOS"],
+    link: "https://github.com/panda850819/murmur-voice",
+    highlights: [
+      "Built with Rust + Tauri 2",
+      "Local processing with Metal/CUDA acceleration",
+      "LLM post-processing pipeline",
+    ],
+  },
+  {
+    name: "Slack CLI",
+    description: "CLI tool for searching and browsing Slack workspaces from the terminal.",
+    image: "/projects/slack-cli.png",
+    tags: ["TypeScript", "CLI", "Slack"],
+    link: "https://github.com/panda850819/slack-cli",
+    highlights: [
+      "Terminal-first Slack interface",
+      "Search messages and channels",
+    ],
+  },
+  {
+    name: "Notion CLI",
+    description: "Manage Notion workspace from your terminal — search, query databases, and manage tasks.",
+    image: "/projects/notion-cli.png",
+    tags: ["TypeScript", "CLI", "Notion"],
+    link: "https://github.com/panda850819/notion-cli",
+    highlights: [
+      "Full Notion API integration",
+      "Database queries from terminal",
+    ],
+  },
+  {
+    name: "Skill Evolution",
+    description: "Let Claude Code skills evolve by themselves through automated testing, scoring, and iteration.",
+    image: "/projects/skill-evolution.png",
+    tags: ["AI", "Claude Code", "Automation"],
+    link: "https://github.com/panda850819/skill-evolution",
+    highlights: [
+      "Autonomous skill improvement",
+      "Test-score-iterate pipeline",
+    ],
+  },
+  {
     name: "WalkinCat 走路貓",
-    description: "主要活躍於 Instagram 的自媒體品牌，分享 AI、生產力工具與 Web3 領域的深度內容，致力於將複雜科技概念轉化為易懂的知識。",
+    description: "主要活躍於 Instagram 的自媒體品牌，分享 AI、生產力工具與 Web3 領域的深度內容。",
     image: "/projects/walkincat.png",
     tags: ["自媒體", "Instagram", "內容創作"],
     link: "#",
     highlights: [
       "營運超過 4 年",
       "專注 AI、生產力與 Web3 內容",
-      "建立活躍的社群互動",
+    ],
+  },
+  {
+    name: "Portfolio Tracker",
+    description: "Investment portfolio tracking system with Next.js frontend and Google Apps Script backend.",
+    image: "/projects/portfolio.png",
+    tags: ["Next.js", "Google Apps Script", "Finance"],
+    link: "https://github.com/panda850819/portfolio-tracker",
+    highlights: [
+      "Real-time portfolio tracking",
+      "Automated data collection",
     ],
   },
 ];

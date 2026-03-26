@@ -11,8 +11,8 @@ export const BOOT_LINES = [
   { text: "resolving pdzeng.com...            ok", color: "text-text-secondary", delay: 150 },
   { text: "loading soul.md...                 ok", color: "text-text-secondary", delay: 280 },
   { text: "loading experience.json...         ok  (8 entries)", color: "text-text-secondary", delay: 400 },
-  { text: "loading projects/...               ok  (1 dir)", color: "text-text-secondary", delay: 500 },
-  { text: "loading skills.yaml...             ok", color: "text-text-secondary", delay: 600 },
+  { text: "loading projects/...               ok  (6 dirs)", color: "text-text-secondary", delay: 500 },
+  { text: "loading skills.md...               ok", color: "text-text-secondary", delay: 600 },
   { text: "", color: "text-text-primary", delay: 700 },
   { text: "ready. type 'help' for commands.", color: "text-accent-cyan", delay: 850 },
 ];

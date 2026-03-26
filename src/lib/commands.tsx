@@ -16,7 +16,7 @@ const HelpOutput = ({ onCommandClick }: { onCommandClick?: (cmd: string) => void
     { cmd: "cat achievements.md", desc: "competition awards" },
     { cmd: "cat contact.json", desc: "reach me" },
     { cmd: "cat education.md", desc: "academic background" },
-    { cmd: "cat skills.yaml", desc: "skill set & proficiency" },
+    { cmd: "cat skills.md", desc: "skill set & proficiency" },
     { cmd: "clear", desc: "clear terminal" },
     { cmd: "help", desc: "show this message" },
   ];
@@ -108,7 +108,7 @@ const ProjectsOutput = () => (
           <span className="text-text-secondary">  panda  </span>
           <span className="text-accent-cyan font-bold">{project.name}/</span>
         </p>
-        <div className="ml-4 p-3 bg-terminal-bg-alt rounded border border-terminal-border">
+        <div className="ml-4">
           <p className="text-text-primary mb-2">{project.description}</p>
           {project.highlights.map((h, i) => (
             <p key={i} className="text-text-secondary text-sm"><span className="text-accent-green">+</span> {h}</p>
@@ -248,7 +248,7 @@ const COMMANDS: Record<string, string[]> = {
   "cat achievements.md": [],
   "cat contact.json": [],
   "cat education.md": [],
-  "cat skills.yaml": [],
+  "cat skills.md": [],
   "clear": [],
 };
 
@@ -275,7 +275,7 @@ export function executeCommand(
     "cat achievements.md": () => <AchievementsOutput />,
     "cat contact.json": () => <ContactOutput />,
     "cat education.md": () => <EducationOutput />,
-    "cat skills.yaml": () => <SkillsOutput />,
+    "cat skills.md": () => <SkillsOutput />,
     "sudo hire-panda": () => <HireOutput />,
   };
 
