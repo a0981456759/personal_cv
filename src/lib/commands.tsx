@@ -210,15 +210,14 @@ const EducationOutput = () => (
 );
 
 const SkillsOutput = () => (
-  <div className="space-y-4">
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
     {skills.map((category, i) => (
       <div key={i} className="space-y-1">
         <p className="text-accent-purple font-bold">{category.category}:</p>
         {category.items.map((item, j) => (
           <p key={j} className="ml-2">
-            <span className="text-accent-cyan">- {item.name}:</span>{" "}
-            <span className="text-accent-orange">{item.level}</span>
-            <span className="text-text-muted">/100</span>
+            <span className="text-accent-cyan">-</span>{" "}
+            <span className="text-text-primary">{item.name}</span>
           </p>
         ))}
       </div>
