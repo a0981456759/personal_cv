@@ -1,153 +1,56 @@
-# 🐼 Panda Tseng - Personal CV Website
+# Panda Tseng - TUI CV
 
-一個基於 Next.js 的個人 CV 網站，採用現代白色極簡設計風格，展示個人品牌、專業經歷與競賽成就。
+Interactive terminal-style CV website with lazygit-inspired multi-panel layout. Built with Next.js, Tokyo Night theme.
 
-## ✨ 特色功能
+**Live:** [pdzeng.com](https://pdzeng.com)
 
-- 🎨 **現代白色設計**：純白背景 + 專業灰色系配色
-- ⚡ **流暢動畫效果**：使用 Framer Motion 實現滾動動畫與互動效果
-- 📱 **完全響應式**：適配桌面、平板和移動設備
-- 🖋️ **打字機效果**：Hero Banner 的動態文字展示
-- 🎯 **區塊化設計**：清晰的內容區塊（Hero, About, Experience, Projects, Achievements, Contact）
-- 🔗 **社交連結整合**：一鍵連接到各大社交平台（Telegram, Twitter, LinkedIn, GitHub, Medium, Blog）
-- 🌐 **中英混合**：內容為中文，導航保持英文
+## Features
 
-## 🛠️ 技術棧
+- **Multi-panel layout** — lazygit-style: file tree sidebar + content panel + info bar
+- **Keyboard navigation** — Tab switches panels, 1-7 jumps to files, arrow keys navigate
+- **Boot sequence** — terminal loading animation on first visit
+- **Command input** — type shell commands (`cat soul.md`, `ls projects/`, etc.)
+- **Mobile responsive** — tab-based Files/Content switcher
+- **SEO** — hidden semantic HTML for crawlers alongside the interactive terminal
 
-- **框架**: Next.js 15 (App Router)
-- **語言**: TypeScript
-- **樣式**: Tailwind CSS
-- **動畫**: Framer Motion
-- **圖標**: Lucide React
-- **字體**: Inter, Space Grotesk, Noto Sans TC
+## Tech Stack
 
-## 🚀 快速開始
+- **Next.js 15** (App Router, static export)
+- **TypeScript** + **Tailwind CSS**
+- **Framer Motion** (animations)
+- **Tokyo Night** color scheme
+- **JetBrains Mono** + **Noto Sans TC** fonts
+- **Vercel** (auto-deploy on push to main)
 
-### 安裝依賴
+## Quick Start
 
 ```bash
 npm install
+npm run dev        # localhost:3000
+npm run build      # production build
 ```
 
-### 啟動開發服務器
+## Content
 
-```bash
-npm run dev
-```
+All CV data lives in `src/data/content.ts`. Edit that file to update personal info, experiences, projects, achievements, education, skills, and social links.
 
-開啟瀏覽器訪問 [http://localhost:3000](http://localhost:3000)
-
-### 構建生產版本
-
-```bash
-npm run build
-```
-
-### 啟動生產服務器
-
-```bash
-npm start
-```
-
-## 📝 自定義內容
-
-所有內容數據都集中在 `src/data/content.ts` 文件中，您可以輕鬆修改：
-
-- **個人信息**: `personalInfo` - 姓名、職稱、標語、簡介
-- **關於我**: `about` - 自我介紹與重點特色
-- **工作經歷**: `experiences` - 按時間倒序排列的工作經驗
-- **精選專案**: `projects` - 主要項目作品（如 WalkinCat 走路貓自媒體）
-- **競賽成就**: `achievements` - 按類別和時間排列的競賽獎項
-- **教育背景**: `education` - 學歷信息
-- **社交連結**: `socialLinks` - Email, Telegram, Twitter, LinkedIn, GitHub, Medium, Blog
-
-## 🎨 自定義主題
-
-主題配置在 `tailwind.config.ts` 中，包含：
-
-- **背景色**: `#FFFFFF` (白色)
-- **主要顏色**:
-  - Black: `#000000`
-  - Dark Gray: `#1F2937`
-  - Gray: `#6B7280`
-- **強調色**:
-  - Light: `#F3F4F6`
-  - Medium: `#E5E7EB`
-  - Dark: `#9CA3AF`
-
-## 📂 項目結構
+## Architecture
 
 ```
-personal-cv/
-├── src/
-│   ├── app/
-│   │   ├── globals.css      # 全局樣式
-│   │   ├── layout.tsx       # 根布局
-│   │   └── page.tsx         # 主頁面
-│   ├── components/          # React 組件
-│   │   ├── Navbar.tsx       # 導航欄
-│   │   ├── Hero.tsx         # 首屏 Banner
-│   │   ├── About.tsx        # 關於我
-│   │   ├── Experience.tsx   # 工作經歷（表格式）
-│   │   ├── Projects.tsx     # 精選專案
-│   │   ├── Achievements.tsx # 競賽成就
-│   │   └── Contact.tsx      # 聯絡方式
-│   └── data/
-│       └── content.ts       # 內容數據（中文）
-├── public/                  # 靜態資源
-├── DEPLOYMENT.md            # Vercel 部署指南
-├── package.json
-├── tsconfig.json
-├── tailwind.config.ts
-├── next.config.ts
-└── README.md
+page.tsx → TerminalWindow (chrome) → Terminal (state manager)
+                                       ├── PanelSidebar (file tree)
+                                       ├── PanelContent (command output)
+                                       ├── PanelInfo (name/title/links)
+                                       └── CommandInput (shell input)
+
+commands.tsx: command string → React component (JSX output)
+content.ts:  centralized CV data source
 ```
 
-## 🌐 部署
+## Deploy
 
-### Vercel（推薦）
+Push to `main` → Vercel auto-deploys to production.
 
-詳細部署步驟請參考 [DEPLOYMENT.md](./DEPLOYMENT.md)
+## License
 
-1. 將代碼推送到 GitHub
-2. 在 Vercel 上導入項目
-3. Vercel 會自動檢測 Next.js 並完成部署
-4. 綁定自定義域名（如 pdzeng.com）
-
-### 其他平台
-
-- **注意**: Cloudflare Pages 有 25 MiB 文件大小限制，不適合此項目
-- 推薦使用 Vercel（無文件大小限制且為 Next.js 優化）
-
-## 👤 關於 Panda Tseng
-
-- **職位**: Co-Founder / 自媒體內容創作者
-- **專注領域**: AI、生產力工具、Web3 與區塊鏈
-- **自媒體**: WalkinCat 走路貓（主要活躍於 Instagram）
-- **背景**: 資訊管理碩士，全端開發者，區塊鏈愛好者
-- **經歷**: 自 2018 年投入加密貨幣領域
-
-## 🏆 主要成就
-
-- 國際區塊鏈奧林匹亞亞軍
-- APP 移動應用創新賽 iOS 組冠軍
-- 第六屆清華創業競賽區塊鏈組冠軍
-- BTSC 京台青年創新創業大賽亞軍
-
-## 🤝 聯繫方式
-
-- **Email**: [panda@walkincat.org](mailto:panda@walkincat.org)
-- **Telegram**: [@FinalFantasty](https://t.me/FinalFantasty)
-- **Twitter**: [@pandazeng1](https://x.com/pandazeng1)
-- **LinkedIn**: [Wei-Chieh Tseng](https://www.linkedin.com/in/wei-chieh-tseng-369303161/)
-- **GitHub**: [@panda850819](https://github.com/panda850819)
-- **Medium**: [@kiss851990](https://medium.com/@kiss851990)
-- **Blog**: [blog.pdzeng.com](https://blog.pdzeng.com)
-
-## 📄 授權
-
-© 2025 Panda Tseng. 版權所有。
-
----
-
-**使用 Next.js、Tailwind CSS 與 Framer Motion 打造 ✨**
+© 2025 Panda Tseng. All rights reserved.
