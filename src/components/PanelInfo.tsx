@@ -1,8 +1,9 @@
 "use client";
 
-import { personalInfo, socialLinks } from "@/data/content";
+import { getContent, socialLinks, type Lang } from "@/data/content";
 
-const PanelInfo = () => {
+const PanelInfo = ({ lang }: { lang: Lang }) => {
+  const { personalInfo } = getContent(lang);
   return (
     <div className="px-4 py-2 font-mono text-xs flex items-center justify-between gap-4 overflow-x-auto">
       <div className="flex items-center gap-2 shrink-0">

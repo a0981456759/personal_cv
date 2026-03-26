@@ -1,5 +1,5 @@
 import React from "react";
-import { personalInfo, about, experiences, projects, achievements, socialLinks, education, skills } from "@/data/content";
+import { getContent, skills, socialLinks, type Lang } from "@/data/content";
 import { ASCII_PANDA } from "./ascii";
 
 export interface CommandOutput {
@@ -44,131 +44,146 @@ const HelpOutput = ({ onCommandClick }: { onCommandClick?: (cmd: string) => void
   );
 };
 
-const WhoamiOutput = () => (
-  <div className="space-y-1">
-    <pre className="text-accent-green text-[10px] sm:text-xs leading-tight">{ASCII_PANDA}</pre>
-    <p className="text-xl font-bold text-text-primary">{personalInfo.name}</p>
-    <p className="text-accent-purple">{personalInfo.title}</p>
-    <p className="text-text-secondary">{personalInfo.tagline}</p>
-    <p className="text-text-secondary text-sm">
-      <span className="text-accent-yellow">location:</span> {personalInfo.location}
-    </p>
-  </div>
-);
+const WhoamiOutput = ({ lang }: { lang: Lang }) => {
+  const { personalInfo } = getContent(lang);
+  return (
+    <div className="space-y-1">
+      <pre className="text-accent-green text-[10px] sm:text-xs leading-tight">{ASCII_PANDA}</pre>
+      <p className="text-xl font-bold text-text-primary">{personalInfo.name}</p>
+      <p className="text-accent-purple">{personalInfo.title}</p>
+      <p className="text-text-secondary">{personalInfo.tagline}</p>
+      <p className="text-text-secondary text-sm">
+        <span className="text-accent-yellow">location:</span> {personalInfo.location}
+      </p>
+    </div>
+  );
+};
 
-const SoulOutput = () => (
-  <div className="space-y-4">
-    <p className="text-accent-purple font-bold"># {about.headline}</p>
-    {about.description.map((p, i) => (
-      <p key={i} className="text-text-primary leading-relaxed">{p}</p>
-    ))}
-    <div className="space-y-2 mt-4">
-      <p className="text-accent-purple font-bold">## Highlights</p>
-      {about.highlights.map((h, i) => (
-        <p key={i} className="text-text-primary">
-          <span className="text-accent-yellow">-</span> {h}
-        </p>
+const SoulOutput = ({ lang }: { lang: Lang }) => {
+  const { about } = getContent(lang);
+  return (
+    <div className="space-y-4">
+      <p className="text-accent-purple font-bold"># {about.headline}</p>
+      {about.description.map((p: string, i: number) => (
+        <p key={i} className="text-text-primary leading-relaxed">{p}</p>
+      ))}
+      <div className="space-y-2 mt-4">
+        <p className="text-accent-purple font-bold">## Highlights</p>
+        {about.highlights.map((h: string, i: number) => (
+          <p key={i} className="text-text-primary">
+            <span className="text-accent-yellow">-</span> {h}
+          </p>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ExperienceOutput = ({ lang }: { lang: Lang }) => {
+  const { experiences } = getContent(lang);
+  return (
+    <div className="space-y-2">
+      {experiences.map((exp, index: number) => (
+        <div key={index}>
+          {index > 0 && (
+            <div className="border-t border-terminal-border/30 my-5" />
+          )}
+          <div className="space-y-0.5">
+          <p className="text-text-muted">{"{"}</p>
+          <div className="ml-4 space-y-0.5">
+            <p><span className="text-accent-cyan">&quot;company&quot;</span><span className="text-text-secondary">: </span><span className="text-accent-green">&quot;{exp.company}&quot;</span><span className="text-text-secondary">,</span></p>
+            <p><span className="text-accent-cyan">&quot;role&quot;</span><span className="text-text-secondary">: </span><span className="text-accent-green">&quot;{exp.position}&quot;</span><span className="text-text-secondary">,</span></p>
+            <p><span className="text-accent-cyan">&quot;period&quot;</span><span className="text-text-secondary">: </span><span className="text-accent-orange">&quot;{exp.period}&quot;</span><span className="text-text-secondary">,</span></p>
+            <p><span className="text-accent-cyan">&quot;location&quot;</span><span className="text-text-secondary">: </span><span className="text-accent-green">&quot;{exp.location}&quot;</span><span className="text-text-secondary">,</span></p>
+            <p><span className="text-accent-cyan">&quot;achievements&quot;</span><span className="text-text-secondary">: [</span></p>
+            <div className="ml-4">
+              {exp.achievements.map((a: string, i: number) => (
+                <p key={i}><span className="text-accent-green">&quot;{a}&quot;</span>{i < exp.achievements.length - 1 && <span className="text-text-secondary">,</span>}</p>
+              ))}
+            </div>
+            <p className="text-text-secondary">],</p>
+            <p><span className="text-accent-cyan">&quot;tags&quot;</span><span className="text-text-secondary">: [</span>{exp.tags.map((t: string, i: number) => (<span key={i}><span className="text-accent-yellow">&quot;{t}&quot;</span>{i < exp.tags.length - 1 && <span className="text-text-secondary">, </span>}</span>))}<span className="text-text-secondary">]</span></p>
+          </div>
+          <p className="text-text-muted">{"}"}</p>
+          </div>
+        </div>
       ))}
     </div>
-  </div>
-);
+  );
+};
 
-const ExperienceOutput = () => (
-  <div className="space-y-2">
-    {experiences.map((exp, index) => (
-      <div key={index}>
-        {index > 0 && (
-          <div className="border-t border-terminal-border/30 my-5" />
-        )}
-        <div className="space-y-0.5">
-        <p className="text-text-muted">{"{"}</p>
-        <div className="ml-4 space-y-0.5">
-          <p><span className="text-accent-cyan">&quot;company&quot;</span><span className="text-text-secondary">: </span><span className="text-accent-green">&quot;{exp.company}&quot;</span><span className="text-text-secondary">,</span></p>
-          <p><span className="text-accent-cyan">&quot;role&quot;</span><span className="text-text-secondary">: </span><span className="text-accent-green">&quot;{exp.position}&quot;</span><span className="text-text-secondary">,</span></p>
-          <p><span className="text-accent-cyan">&quot;period&quot;</span><span className="text-text-secondary">: </span><span className="text-accent-orange">&quot;{exp.period}&quot;</span><span className="text-text-secondary">,</span></p>
-          <p><span className="text-accent-cyan">&quot;location&quot;</span><span className="text-text-secondary">: </span><span className="text-accent-green">&quot;{exp.location}&quot;</span><span className="text-text-secondary">,</span></p>
-          <p><span className="text-accent-cyan">&quot;achievements&quot;</span><span className="text-text-secondary">: [</span></p>
-          <div className="ml-4">
-            {exp.achievements.map((a, i) => (
-              <p key={i}><span className="text-accent-green">&quot;{a}&quot;</span>{i < exp.achievements.length - 1 && <span className="text-text-secondary">,</span>}</p>
-            ))}
-          </div>
-          <p className="text-text-secondary">],</p>
-          <p><span className="text-accent-cyan">&quot;tags&quot;</span><span className="text-text-secondary">: [</span>{exp.tags.map((t, i) => (<span key={i}><span className="text-accent-yellow">&quot;{t}&quot;</span>{i < exp.tags.length - 1 && <span className="text-text-secondary">, </span>}</span>))}<span className="text-text-secondary">]</span></p>
-        </div>
-        <p className="text-text-muted">{"}"}</p>
-        </div>
-      </div>
-    ))}
-  </div>
-);
-
-const ProjectsOutput = () => (
-  <div className="space-y-4">
-    <p className="text-text-secondary text-sm">total {projects.length}</p>
-    {projects.map((project, index) => (
-      <div key={index}>
-        {index > 0 && (
-          <div className="border-t border-terminal-border/30 my-5" />
-        )}
-        <div className="space-y-2">
-          <p className="text-sm">
-            <span className="text-accent-green">drwxr-xr-x</span>
-            <span className="text-text-secondary">  panda  </span>
-            <span className="text-accent-cyan font-bold">{project.name}/</span>
-          </p>
-          <div className="ml-4">
-            <p className="text-text-primary mb-2">{project.description}</p>
-            {project.highlights.map((h, i) => (
-              <p key={i} className="text-text-secondary text-sm"><span className="text-accent-green">+</span> {h}</p>
-            ))}
-            <div className="flex flex-wrap gap-2 mt-2">
-              {project.tags.map((tag, i) => (
-                <span key={i} className="terminal-tag">{tag}</span>
+const ProjectsOutput = ({ lang }: { lang: Lang }) => {
+  const { projects } = getContent(lang);
+  return (
+    <div className="space-y-4">
+      <p className="text-text-secondary text-sm">total {projects.length}</p>
+      {projects.map((project, index: number) => (
+        <div key={index}>
+          {index > 0 && (
+            <div className="border-t border-terminal-border/30 my-5" />
+          )}
+          <div className="space-y-2">
+            <p className="text-sm">
+              <span className="text-accent-green">drwxr-xr-x</span>
+              <span className="text-text-secondary">  panda  </span>
+              <span className="text-accent-cyan font-bold">{project.name}/</span>
+            </p>
+            <div className="ml-4">
+              <p className="text-text-primary mb-2">{project.description}</p>
+              {project.highlights.map((h: string, i: number) => (
+                <p key={i} className="text-text-secondary text-sm"><span className="text-accent-green">+</span> {h}</p>
               ))}
+              <div className="flex flex-wrap gap-2 mt-2">
+                {project.tags.map((tag: string, i: number) => (
+                  <span key={i} className="terminal-tag">{tag}</span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
+};
 
-const AchievementsOutput = () => (
-  <div className="space-y-8">
-    {achievements.map((category, ci) => (
-      <div key={ci} className="space-y-3">
-        <p className="text-accent-purple font-bold">## {category.category}</p>
-        <div className="overflow-x-auto">
-          <table className="text-sm w-full">
-            <thead>
-              <tr className="text-text-secondary border-b border-terminal-border">
-                <th className="text-left pr-4 py-1.5 font-normal">TITLE</th>
-                <th className="text-left pr-4 py-1.5 font-normal">COMPETITION</th>
-                <th className="text-left pr-4 py-1.5 font-normal">YEAR</th>
-                <th className="text-left py-1.5 font-normal">LOCATION</th>
-              </tr>
-            </thead>
-            <tbody>
-              {category.awards.map((award, ai) => (
-                <tr key={ai} className="border-b border-terminal-border/30">
-                  <td className="pr-4 py-2 text-accent-yellow font-bold whitespace-nowrap">{award.title}</td>
-                  <td className="pr-4 py-2 text-text-primary">
-                    {"link" in award && award.link ? (
-                      <a href={award.link} target="_blank" rel="noopener noreferrer" className="terminal-link">{award.competition}</a>
-                    ) : award.competition}
-                  </td>
-                  <td className="pr-4 py-2 text-accent-orange whitespace-nowrap">{award.year}</td>
-                  <td className="py-2 text-text-secondary whitespace-nowrap">{award.location}</td>
+const AchievementsOutput = ({ lang }: { lang: Lang }) => {
+  const { achievements } = getContent(lang);
+  return (
+    <div className="space-y-8">
+      {achievements.map((category, ci: number) => (
+        <div key={ci} className="space-y-3">
+          <p className="text-accent-purple font-bold">## {category.category}</p>
+          <div className="overflow-x-auto">
+            <table className="text-sm w-full">
+              <thead>
+                <tr className="text-text-secondary border-b border-terminal-border">
+                  <th className="text-left pr-4 py-1.5 font-normal">TITLE</th>
+                  <th className="text-left pr-4 py-1.5 font-normal">COMPETITION</th>
+                  <th className="text-left pr-4 py-1.5 font-normal">YEAR</th>
+                  <th className="text-left py-1.5 font-normal">LOCATION</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {category.awards.map((award, ai: number) => (
+                  <tr key={ai} className="border-b border-terminal-border/30">
+                    <td className="pr-4 py-2 text-accent-yellow font-bold whitespace-nowrap">{award.title}</td>
+                    <td className="pr-4 py-2 text-text-primary">
+                      {"link" in award && award.link ? (
+                        <a href={award.link} target="_blank" rel="noopener noreferrer" className="terminal-link">{award.competition}</a>
+                      ) : award.competition}
+                    </td>
+                    <td className="pr-4 py-2 text-accent-orange whitespace-nowrap">{award.year}</td>
+                    <td className="py-2 text-text-secondary whitespace-nowrap">{award.location}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
+};
 
 const ContactOutput = () => {
   const links = [
@@ -206,25 +221,28 @@ const ContactOutput = () => {
   );
 };
 
-const EducationOutput = () => (
-  <div className="space-y-4">
-    <p className="text-accent-purple font-bold"># Education</p>
-    {education.map((edu, i) => (
-      <div key={i} className="space-y-1 ml-2">
-        <p className="text-text-primary font-bold">{edu.school}</p>
-        <p className="text-accent-cyan">{edu.degree} &mdash; {edu.major}</p>
-        <p className="text-text-secondary text-sm">{edu.period} | {edu.location}</p>
-      </div>
-    ))}
-  </div>
-);
+const EducationOutput = ({ lang }: { lang: Lang }) => {
+  const { education } = getContent(lang);
+  return (
+    <div className="space-y-4">
+      <p className="text-accent-purple font-bold"># Education</p>
+      {education.map((edu, i: number) => (
+        <div key={i} className="space-y-1 ml-2">
+          <p className="text-text-primary font-bold">{edu.school}</p>
+          <p className="text-accent-cyan">{edu.degree} &mdash; {edu.major}</p>
+          <p className="text-text-secondary text-sm">{edu.period} | {edu.location}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const SkillsOutput = () => (
   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px 32px" }}>
-    {skills.map((category, i) => (
+    {skills.map((category, i: number) => (
       <div key={i} className="space-y-1">
         <p className="text-accent-purple font-bold">{category.category}:</p>
-        {category.items.map((item, j) => (
+        {category.items.map((item, j: number) => (
           <p key={j} className="ml-2">
             <span className="text-accent-cyan">-</span>{" "}
             <span className="text-text-primary">{item.name}</span>
@@ -267,7 +285,8 @@ export function getCommandNames(): string[] {
 
 export function executeCommand(
   input: string,
-  onCommandClick?: (cmd: string) => void
+  onCommandClick?: (cmd: string) => void,
+  lang: Lang = "en"
 ): CommandOutput | null {
   const trimmed = input.trim().toLowerCase();
 
@@ -276,14 +295,14 @@ export function executeCommand(
 
   const outputMap: Record<string, () => React.ReactNode> = {
     "help": () => <HelpOutput onCommandClick={onCommandClick} />,
-    "whoami": () => <WhoamiOutput />,
-    "cat soul.md": () => <SoulOutput />,
-    "cat experience.json": () => <ExperienceOutput />,
-    "ls projects/": () => <ProjectsOutput />,
-    "ls projects": () => <ProjectsOutput />,
-    "cat achievements.md": () => <AchievementsOutput />,
+    "whoami": () => <WhoamiOutput lang={lang} />,
+    "cat soul.md": () => <SoulOutput lang={lang} />,
+    "cat experience.json": () => <ExperienceOutput lang={lang} />,
+    "ls projects/": () => <ProjectsOutput lang={lang} />,
+    "ls projects": () => <ProjectsOutput lang={lang} />,
+    "cat achievements.md": () => <AchievementsOutput lang={lang} />,
     "cat contact.json": () => <ContactOutput />,
-    "cat education.md": () => <EducationOutput />,
+    "cat education.md": () => <EducationOutput lang={lang} />,
     "cat skills.md": () => <SkillsOutput />,
     "sudo hire-panda": () => <HireOutput />,
   };

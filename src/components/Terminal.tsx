@@ -9,6 +9,7 @@ import PanelContent from "./PanelContent";
 import PanelInfo from "./PanelInfo";
 import { executeCommand } from "@/lib/commands";
 import { BOOT_LINES } from "@/lib/ascii";
+import type { Lang } from "@/data/content";
 
 type PanelFocus = "sidebar" | "content" | "command";
 
@@ -27,6 +28,7 @@ const Terminal = () => {
   const [focusedPanel, setFocusedPanel] = useState<PanelFocus>("sidebar");
   const [selectedFileIndex, setSelectedFileIndex] = useState(0);
   const [mobileTab, setMobileTab] = useState<"files" | "content">("files");
+  const [lang, setLang] = useState<Lang>("en");
   const inputRef = useRef<CommandInputHandle>(null);
   const lineIdRef = useRef(0);
 
@@ -36,7 +38,7 @@ const Terminal = () => {
 
   // Derive content from selected file
   const selectedFile = FILE_TREE[selectedFileIndex];
-  const contentResult = executeCommand(selectedFile.command, handleCommandRef.current);
+  const contentResult = executeCommand(selectedFile.command, handleCommandRef.current, lang);
 
   const handleCommand = useCallback((input: string) => {
     const trimmed = input.trim().toLowerCase();
@@ -55,7 +57,7 @@ const Terminal = () => {
     }
 
     // For non-file commands (help, whoami, sudo hire-panda), show in content panel
-    const result = executeCommand(input, handleCommandRef.current);
+    const result = executeCommand(input, handleCommandRef.current, lang);
     if (result) {
       setFocusedPanel("content");
       setMobileTab("content");
@@ -261,18 +263,26 @@ const Terminal = () => {
       {/* Info bar */}
       <div className="shrink-0">
         <PanelBorder title="Info" focused={false} className="mx-3 mb-1">
-          <PanelInfo />
+          <PanelInfo lang={lang} />
         </PanelBorder>
       </div>
 
       {/* Command input */}
       <div className="shrink-0 px-3 pb-3">
-        <div onClick={() => setFocusedPanel("command")}>
-          <CommandInput
-            ref={inputRef}
-            onSubmit={handleCommand}
-            disabled={phase !== "ready"}
-          />
+        <div className="flex items-center gap-2">
+          <div className="flex-1" onClick={() => setFocusedPanel("command")}>
+            <CommandInput
+              ref={inputRef}
+              onSubmit={handleCommand}
+              disabled={phase !== "ready"}
+            />
+          </div>
+          <button
+            onClick={() => setLang(lang === "en" ? "zh" : "en")}
+            className="text-[10px] font-mono px-2 py-1 border border-terminal-border rounded text-text-secondary hover:text-accent-cyan hover:border-accent-cyan/50 transition-colors cursor-pointer shrink-0"
+          >
+            {lang === "en" ? "中" : "EN"}
+          </button>
         </div>
         <div className="text-text-muted text-[10px] font-mono mt-1 px-1">
           Tab: switch panel | 1-7: jump to file | type command + Enter
