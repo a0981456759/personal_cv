@@ -102,21 +102,26 @@ const ProjectsOutput = () => (
   <div className="space-y-4">
     <p className="text-text-secondary text-sm">total {projects.length}</p>
     {projects.map((project, index) => (
-      <div key={index} className="space-y-2">
-        <p className="text-sm">
-          <span className="text-accent-green">drwxr-xr-x</span>
-          <span className="text-text-secondary">  panda  </span>
-          <span className="text-accent-cyan font-bold">{project.name}/</span>
-        </p>
-        <div className="ml-4">
-          <p className="text-text-primary mb-2">{project.description}</p>
-          {project.highlights.map((h, i) => (
-            <p key={i} className="text-text-secondary text-sm"><span className="text-accent-green">+</span> {h}</p>
-          ))}
-          <div className="flex flex-wrap gap-2 mt-2">
-            {project.tags.map((tag, i) => (
-              <span key={i} className="terminal-tag">{tag}</span>
+      <div key={index}>
+        {index > 0 && (
+          <div className="border-t border-terminal-border/30 my-4" />
+        )}
+        <div className="space-y-2">
+          <p className="text-sm">
+            <span className="text-accent-green">drwxr-xr-x</span>
+            <span className="text-text-secondary">  panda  </span>
+            <span className="text-accent-cyan font-bold">{project.name}/</span>
+          </p>
+          <div className="ml-4">
+            <p className="text-text-primary mb-2">{project.description}</p>
+            {project.highlights.map((h, i) => (
+              <p key={i} className="text-text-secondary text-sm"><span className="text-accent-green">+</span> {h}</p>
             ))}
+            <div className="flex flex-wrap gap-2 mt-2">
+              {project.tags.map((tag, i) => (
+                <span key={i} className="terminal-tag">{tag}</span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
