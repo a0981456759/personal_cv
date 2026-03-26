@@ -1,21 +1,18 @@
-// Real panda ASCII art, NOT a penguin
 export const ASCII_PANDA = `
-   ██████   ██████
-  ██░░░░██ ██░░░░██
-  ██    ████    ████
-  ██  ██████████  ██
-   ██  ░░░░░░░░  ██
-    ██ ●      ● ██
-     ██   ██   ██
-      ██ ████ ██
-       ████████
-        ██  ██
+ ____                 _
+|  _ \\ __ _ _ __   __| | __ _
+| |_) / _\` | '_ \\ / _\` |/ _\` |
+|  __/ (_| | | | | (_| | (_| |
+|_|   \\__,_|_| |_|\\__,_|\\__,_|
 `;
 
 export const BOOT_LINES = [
-  { text: "╭─────────────────────────────────────╮", color: "text-text-secondary", delay: 0 },
-  { text: "│  panda-cv v2.0.0                    │", color: "text-accent-green", delay: 100 },
-  { text: "│  https://pdzeng.com                 │", color: "text-text-secondary", delay: 200 },
-  { text: "╰─────────────────────────────────────╯", color: "text-text-secondary", delay: 300 },
-  { text: "", color: "text-text-primary", delay: 400 },
+  { text: "panda-cv v2.0.0", color: "text-accent-green", delay: 0 },
+  { text: "resolving pdzeng.com...            ok", color: "text-text-secondary", delay: 150 },
+  { text: "loading soul.md...                 ok", color: "text-text-secondary", delay: 280 },
+  { text: "loading experience.json...         ok  (8 entries)", color: "text-text-secondary", delay: 400 },
+  { text: "loading projects/...               ok  (1 dir)", color: "text-text-secondary", delay: 500 },
+  { text: "loading skills.yaml...             ok", color: "text-text-secondary", delay: 600 },
+  { text: "", color: "text-text-primary", delay: 700 },
+  { text: "ready. type 'help' for commands.", color: "text-accent-cyan", delay: 850 },
 ];

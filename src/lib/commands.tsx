@@ -1,5 +1,5 @@
 import React from "react";
-import { personalInfo, about, experiences, projects, achievements, socialLinks, education } from "@/data/content";
+import { personalInfo, about, experiences, projects, achievements, socialLinks, education, skills } from "@/data/content";
 import { ASCII_PANDA } from "./ascii";
 
 export interface CommandOutput {
@@ -7,21 +7,42 @@ export interface CommandOutput {
   output: React.ReactNode;
 }
 
-const HelpOutput = () => (
-  <div className="space-y-1">
-    <p className="text-accent-purple font-bold">Available commands:</p>
-    <p><span className="text-accent-cyan">whoami</span>          <span className="text-text-secondary">— who is Panda Tseng</span></p>
-    <p><span className="text-accent-cyan">cat soul.md</span>     <span className="text-text-secondary">— about me, values, highlights</span></p>
-    <p><span className="text-accent-cyan">cat experience.json</span> <span className="text-text-secondary">— work experience</span></p>
-    <p><span className="text-accent-cyan">ls projects/</span>    <span className="text-text-secondary">— side projects &amp; initiatives</span></p>
-    <p><span className="text-accent-cyan">cat achievements.md</span> <span className="text-text-secondary">— competition awards</span></p>
-    <p><span className="text-accent-cyan">cat contact.json</span> <span className="text-text-secondary">— reach me</span></p>
-    <p><span className="text-accent-cyan">cat education.md</span> <span className="text-text-secondary">— academic background</span></p>
-    <p><span className="text-accent-cyan">clear</span>           <span className="text-text-secondary">— clear terminal</span></p>
-    <p><span className="text-accent-cyan">help</span>            <span className="text-text-secondary">— show this message</span></p>
-    <p className="text-text-muted mt-2">Tip: press Tab to autocomplete, Up/Down for history</p>
-  </div>
-);
+const HelpOutput = ({ onCommandClick }: { onCommandClick?: (cmd: string) => void }) => {
+  const commands = [
+    { cmd: "whoami", desc: "who is Panda Tseng" },
+    { cmd: "cat soul.md", desc: "about me, values, highlights" },
+    { cmd: "cat experience.json", desc: "work experience" },
+    { cmd: "ls projects/", desc: "side projects & initiatives" },
+    { cmd: "cat achievements.md", desc: "competition awards" },
+    { cmd: "cat contact.json", desc: "reach me" },
+    { cmd: "cat education.md", desc: "academic background" },
+    { cmd: "cat skills.yaml", desc: "skill set & proficiency" },
+    { cmd: "clear", desc: "clear terminal" },
+    { cmd: "help", desc: "show this message" },
+  ];
+
+  return (
+    <div className="space-y-3">
+      <p className="text-accent-purple font-bold">Available commands:</p>
+      <div className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1">
+        {commands.map(({ cmd, desc }) => (
+          <React.Fragment key={cmd}>
+            <button
+              onClick={() => onCommandClick?.(cmd)}
+              className="text-left text-accent-cyan hover:underline cursor-pointer"
+            >
+              {cmd}
+            </button>
+            <span className="text-text-secondary">&mdash; {desc}</span>
+          </React.Fragment>
+        ))}
+      </div>
+      <p className="text-text-muted text-xs mt-2">
+        Tab: autocomplete  |  &uarr;&darr;: history  |  Click any command to run it
+      </p>
+    </div>
+  );
+};
 
 const WhoamiOutput = () => (
   <div className="space-y-1">
@@ -141,13 +162,13 @@ const AchievementsOutput = () => (
 
 const ContactOutput = () => {
   const links = [
-    { key: "email", value: socialLinks.email },
-    { key: "telegram", value: "t.me/FinalFantasty" },
-    { key: "twitter", value: "x.com/pandazeng1" },
-    { key: "linkedin", value: "linkedin.com/in/wei-chieh-tseng" },
-    { key: "github", value: "github.com/panda850819" },
-    { key: "medium", value: "medium.com/@kiss851990" },
-    { key: "blog", value: "blog.pdzeng.com" },
+    { key: "email", value: socialLinks.email, href: `mailto:${socialLinks.email}` },
+    { key: "telegram", value: "t.me/FinalFantasty", href: socialLinks.telegram },
+    { key: "twitter", value: "x.com/pandazeng1", href: socialLinks.twitter },
+    { key: "linkedin", value: "linkedin.com/in/wei-chieh-tseng", href: socialLinks.linkedin },
+    { key: "github", value: "github.com/panda850819", href: socialLinks.github },
+    { key: "medium", value: "medium.com/@kiss851990", href: socialLinks.medium },
+    { key: "blog", value: "blog.pdzeng.com", href: socialLinks.blog },
   ];
 
   return (
@@ -158,7 +179,14 @@ const ContactOutput = () => {
           <p key={link.key}>
             <span className="text-accent-cyan">&quot;{link.key}&quot;</span>
             <span className="text-text-secondary">: </span>
-            <span className="text-accent-green">&quot;{link.value}&quot;</span>
+            <a
+              href={link.href}
+              target={link.key === "email" ? undefined : "_blank"}
+              rel={link.key === "email" ? undefined : "noopener noreferrer"}
+              className="text-accent-green hover:underline"
+            >
+              &quot;{link.value}&quot;
+            </a>
             {i < links.length - 1 && <span className="text-text-secondary">,</span>}
           </p>
         ))}
@@ -174,10 +202,40 @@ const EducationOutput = () => (
     {education.map((edu, i) => (
       <div key={i} className="space-y-0.5 ml-2">
         <p className="text-text-primary font-bold">{edu.school}</p>
-        <p className="text-accent-cyan">{edu.degree} — {edu.major}</p>
+        <p className="text-accent-cyan">{edu.degree} &mdash; {edu.major}</p>
         <p className="text-text-secondary text-sm">{edu.period} | {edu.location}</p>
       </div>
     ))}
+  </div>
+);
+
+const SkillsOutput = () => (
+  <div className="space-y-4">
+    {skills.map((category, i) => (
+      <div key={i} className="space-y-1">
+        <p className="text-accent-purple font-bold">{category.category}:</p>
+        {category.items.map((item, j) => (
+          <p key={j} className="ml-2">
+            <span className="text-accent-cyan">- {item.name}:</span>{" "}
+            <span className="text-accent-orange">{item.level}</span>
+            <span className="text-text-muted">/100</span>
+          </p>
+        ))}
+      </div>
+    ))}
+  </div>
+);
+
+const HireOutput = () => (
+  <div className="space-y-2">
+    <p className="text-accent-green font-bold">Permission granted.</p>
+    <p className="text-text-primary">Panda is available for:</p>
+    <p className="text-text-primary"><span className="text-accent-yellow">-</span> Web3 product & operations roles</p>
+    <p className="text-text-primary"><span className="text-accent-yellow">-</span> Content collaboration & partnerships</p>
+    <p className="text-text-primary"><span className="text-accent-yellow">-</span> Blockchain consulting</p>
+    <p className="text-text-primary mt-2">
+      <span className="text-accent-cyan">&rarr;</span> Reach out: <a href="mailto:panda@walkincat.org" className="terminal-link">panda@walkincat.org</a>
+    </p>
   </div>
 );
 
@@ -190,6 +248,7 @@ const COMMANDS: Record<string, string[]> = {
   "cat achievements.md": [],
   "cat contact.json": [],
   "cat education.md": [],
+  "cat skills.yaml": [],
   "clear": [],
 };
 
@@ -197,27 +256,32 @@ export function getCommandNames(): string[] {
   return Object.keys(COMMANDS);
 }
 
-export function executeCommand(input: string): CommandOutput | null {
+export function executeCommand(
+  input: string,
+  onCommandClick?: (cmd: string) => void
+): CommandOutput | null {
   const trimmed = input.trim().toLowerCase();
 
   if (trimmed === "") return null;
   if (trimmed === "clear") return { command: input, output: null };
 
-  const outputMap: Record<string, React.ReactNode> = {
-    "help": <HelpOutput />,
-    "whoami": <WhoamiOutput />,
-    "cat soul.md": <SoulOutput />,
-    "cat experience.json": <ExperienceOutput />,
-    "ls projects/": <ProjectsOutput />,
-    "ls projects": <ProjectsOutput />,
-    "cat achievements.md": <AchievementsOutput />,
-    "cat contact.json": <ContactOutput />,
-    "cat education.md": <EducationOutput />,
+  const outputMap: Record<string, () => React.ReactNode> = {
+    "help": () => <HelpOutput onCommandClick={onCommandClick} />,
+    "whoami": () => <WhoamiOutput />,
+    "cat soul.md": () => <SoulOutput />,
+    "cat experience.json": () => <ExperienceOutput />,
+    "ls projects/": () => <ProjectsOutput />,
+    "ls projects": () => <ProjectsOutput />,
+    "cat achievements.md": () => <AchievementsOutput />,
+    "cat contact.json": () => <ContactOutput />,
+    "cat education.md": () => <EducationOutput />,
+    "cat skills.yaml": () => <SkillsOutput />,
+    "sudo hire-panda": () => <HireOutput />,
   };
 
-  const output = outputMap[trimmed];
-  if (output !== undefined) {
-    return { command: input, output };
+  const factory = outputMap[trimmed];
+  if (factory) {
+    return { command: input, output: factory() };
   }
 
   return {
@@ -225,7 +289,16 @@ export function executeCommand(input: string): CommandOutput | null {
     output: (
       <p className="text-accent-red">
         zsh: command not found: {input.split(" ")[0]}
-        <span className="text-text-secondary block mt-1">Type <span className="text-accent-cyan">help</span> for available commands</span>
+        <span className="text-text-secondary block mt-1">
+          Type{" "}
+          <button
+            onClick={() => onCommandClick?.("help")}
+            className="text-accent-cyan hover:underline cursor-pointer"
+          >
+            help
+          </button>{" "}
+          for available commands
+        </span>
       </p>
     ),
   };

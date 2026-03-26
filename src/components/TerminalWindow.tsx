@@ -10,7 +10,7 @@ const TerminalWindow = ({ children }: TerminalWindowProps) => {
       {/* Window Chrome */}
       <div className="sticky top-0 z-50 bg-terminal-bg-alt border-b border-terminal-border">
         <div className="max-w-terminal mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5" aria-hidden="true">
             <div className="w-3 h-3 rounded-full bg-accent-red/80" />
             <div className="w-3 h-3 rounded-full bg-accent-yellow/80" />
             <div className="w-3 h-3 rounded-full bg-accent-green/80" />
