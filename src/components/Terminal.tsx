@@ -263,26 +263,28 @@ const Terminal = () => {
       {/* Info bar */}
       <div className="shrink-0">
         <PanelBorder title="Info" focused={false} className="mx-3 mb-1">
-          <PanelInfo lang={lang} />
+          <div className="flex items-center">
+            <div className="flex-1">
+              <PanelInfo lang={lang} />
+            </div>
+            <button
+              onClick={() => setLang(lang === "en" ? "zh" : "en")}
+              className="text-[10px] font-mono px-2 py-1.5 mr-2 text-text-secondary hover:text-accent-cyan transition-colors cursor-pointer shrink-0"
+            >
+              {lang === "en" ? "中文" : "EN"}
+            </button>
+          </div>
         </PanelBorder>
       </div>
 
       {/* Command input */}
       <div className="shrink-0 px-3 pb-3">
-        <div className="flex items-center gap-2">
-          <div className="flex-1" onClick={() => setFocusedPanel("command")}>
-            <CommandInput
-              ref={inputRef}
-              onSubmit={handleCommand}
-              disabled={phase !== "ready"}
-            />
-          </div>
-          <button
-            onClick={() => setLang(lang === "en" ? "zh" : "en")}
-            className="text-[10px] font-mono px-2 py-1 border border-terminal-border rounded text-text-secondary hover:text-accent-cyan hover:border-accent-cyan/50 transition-colors cursor-pointer shrink-0"
-          >
-            {lang === "en" ? "中" : "EN"}
-          </button>
+        <div onClick={() => setFocusedPanel("command")}>
+          <CommandInput
+            ref={inputRef}
+            onSubmit={handleCommand}
+            disabled={phase !== "ready"}
+          />
         </div>
         <div className="text-text-muted text-[10px] font-mono mt-1 px-1">
           Tab: switch panel | 1-7: jump to file | type command + Enter

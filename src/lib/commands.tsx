@@ -153,31 +153,25 @@ const AchievementsOutput = ({ lang }: { lang: Lang }) => {
       {achievements.map((category, ci: number) => (
         <div key={ci} className="space-y-3">
           <p className="text-accent-purple font-bold">## {category.category}</p>
-          <div className="overflow-x-auto">
-            <table className="text-sm w-full">
-              <thead>
-                <tr className="text-text-secondary border-b border-terminal-border">
-                  <th className="text-left pr-4 py-1.5 font-normal">TITLE</th>
-                  <th className="text-left pr-4 py-1.5 font-normal">COMPETITION</th>
-                  <th className="text-left pr-4 py-1.5 font-normal">YEAR</th>
-                  <th className="text-left py-1.5 font-normal">LOCATION</th>
-                </tr>
-              </thead>
-              <tbody>
-                {category.awards.map((award, ai: number) => (
-                  <tr key={ai} className="border-b border-terminal-border/30">
-                    <td className="pr-4 py-2 text-accent-yellow font-bold whitespace-nowrap">{award.title}</td>
-                    <td className="pr-4 py-2 text-text-primary">
-                      {"link" in award && award.link ? (
-                        <a href={award.link} target="_blank" rel="noopener noreferrer" className="terminal-link">{award.competition}</a>
-                      ) : award.competition}
-                    </td>
-                    <td className="pr-4 py-2 text-accent-orange whitespace-nowrap">{award.year}</td>
-                    <td className="py-2 text-text-secondary whitespace-nowrap">{award.location}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-3">
+            {category.awards.map((award, ai: number) => (
+              <div key={ai} className="space-y-0.5">
+                <p>
+                  <span className="text-accent-yellow font-bold">{award.title}</span>
+                  <span className="text-text-muted"> — </span>
+                  {"link" in award && award.link ? (
+                    <a href={award.link} target="_blank" rel="noopener noreferrer" className="terminal-link">{award.competition}</a>
+                  ) : (
+                    <span className="text-text-primary">{award.competition}</span>
+                  )}
+                </p>
+                <p className="text-sm">
+                  <span className="text-accent-orange">{award.year}</span>
+                  <span className="text-text-muted"> · </span>
+                  <span className="text-text-secondary">{award.location}</span>
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       ))}
