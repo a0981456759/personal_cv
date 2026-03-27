@@ -159,8 +159,8 @@ const AchievementsOutput = ({ lang }: { lang: Lang }) => {
                 <p>
                   <span className="text-accent-yellow font-bold">{award.title}</span>
                   <span className="text-text-muted"> — </span>
-                  {"link" in award && award.link ? (
-                    <a href={award.link} target="_blank" rel="noopener noreferrer" className="terminal-link">{award.competition}</a>
+                  {"link" in award && typeof award.link === "string" && award.link ? (
+                    <a href={award.link as string} target="_blank" rel="noopener noreferrer" className="terminal-link">{award.competition}</a>
                   ) : (
                     <span className="text-text-primary">{award.competition}</span>
                   )}
@@ -182,12 +182,7 @@ const AchievementsOutput = ({ lang }: { lang: Lang }) => {
 const ContactOutput = () => {
   const links = [
     { key: "email", value: socialLinks.email, href: `mailto:${socialLinks.email}` },
-    { key: "telegram", value: "t.me/FinalFantasty", href: socialLinks.telegram },
-    { key: "twitter", value: "x.com/pandazeng1", href: socialLinks.twitter },
-    { key: "linkedin", value: "linkedin.com/in/wei-chieh-tseng", href: socialLinks.linkedin },
-    { key: "github", value: "github.com/panda850819", href: socialLinks.github },
-    { key: "medium", value: "medium.com/@kiss851990", href: socialLinks.medium },
-    { key: "blog", value: "blog.pdzeng.com", href: socialLinks.blog },
+    { key: "github", value: "github.com/a0981456759", href: socialLinks.github },
   ];
 
   return (
@@ -255,7 +250,7 @@ const HireOutput = () => (
     <p className="text-text-primary"><span className="text-accent-yellow">-</span> Content collaboration & partnerships</p>
     <p className="text-text-primary"><span className="text-accent-yellow">-</span> Blockchain consulting</p>
     <p className="text-text-primary mt-2">
-      <span className="text-accent-cyan">&rarr;</span> Reach out: <a href="mailto:panda@walkincat.org" className="terminal-link">panda@walkincat.org</a>
+      <span className="text-accent-cyan">&rarr;</span> Reach out: <a href="mailto:m10705506@gmail.com" className="terminal-link">m10705506@gmail.com</a>
     </p>
   </div>
 );

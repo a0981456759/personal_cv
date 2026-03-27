@@ -49,3 +49,7 @@ docs/superpowers/
 
 # worktrees
 .worktrees/
+
+# personal / private
+master_resume.md
+.claude/

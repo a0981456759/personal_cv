@@ -84,9 +84,6 @@ export default function Home() {
             <h2>Contact</h2>
             <p>Email: {socialLinks.email}</p>
             <p>GitHub: {socialLinks.github}</p>
-            <p>Twitter: {socialLinks.twitter}</p>
-            <p>LinkedIn: {socialLinks.linkedin}</p>
-            <p>Blog: {socialLinks.blog}</p>
           </section>
         </article>
       </div>

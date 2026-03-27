@@ -16,7 +16,7 @@ const TerminalWindow = ({ children }: TerminalWindowProps) => {
             <div className="w-3 h-3 rounded-full bg-accent-green/80" />
           </div>
           <span className="text-text-secondary text-xs ml-2">
-            panda@cv — zsh — 80x24
+            howard@cv — zsh — 80x24
           </span>
         </div>
       </div>

@@ -14,13 +14,13 @@ const notoSansTC = Noto_Sans_TC({
 });
 
 export const metadata: Metadata = {
-  title: "panda@cv ~ %",
-  description: "Panda Tseng | Crypto PM, Builder, KOL — Terminal CV",
-  keywords: ["Web3", "Crypto", "Product Manager", "DeFi", "Blockchain", "KOL"],
-  authors: [{ name: "Panda Tseng" }],
+  title: "howard@cv ~ %",
+  description: "Howard Wang | Full-Stack Engineer, Web3 & AI — Terminal CV",
+  keywords: ["Full-Stack", "Web3", "AI", "DeFi", "Quantitative Trading", "Melbourne"],
+  authors: [{ name: "Howard Wang" }],
   openGraph: {
-    title: "panda@cv ~ % whoami",
-    description: "Panda Tseng — Building the bridge between TradFi & Web3",
+    title: "howard@cv ~ % whoami",
+    description: "Howard Wang — Full-Stack Engineer bridging AI, Web3, and quantitative trading",
     type: "website",
   },
 };

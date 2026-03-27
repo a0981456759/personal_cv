@@ -20,12 +20,6 @@ const PanelInfo = ({ lang }: { lang: Lang }) => {
         <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" className="hover:text-accent-cyan transition-colors">
           gh
         </a>
-        <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="hover:text-accent-cyan transition-colors">
-          x
-        </a>
-        <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-accent-cyan transition-colors">
-          in
-        </a>
       </div>
     </div>
   );
