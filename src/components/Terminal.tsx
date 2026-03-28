@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CommandInput, { CommandInputHandle } from "./CommandInput";
 import PanelBorder from "./PanelBorder";
@@ -36,29 +36,36 @@ const Terminal = () => {
 
   const handleCommandRef = useRef<(input: string) => void>(() => {});
 
-  // Derive content from selected file
+  // Derive content from selected file or command output
   const selectedFile = FILE_TREE[selectedFileIndex];
-  const contentResult = executeCommand(selectedFile.command, handleCommandRef.current, lang);
+  const [commandOutput, setCommandOutput] = useState<{ command: string; output: React.ReactNode } | null>(null);
+  const fileResult = executeCommand(selectedFile.command, handleCommandRef.current, lang);
+  const contentResult = commandOutput ?? fileResult;
 
   const handleCommand = useCallback((input: string) => {
     const trimmed = input.trim().toLowerCase();
 
-    if (trimmed === "clear") return;
+    if (trimmed === "clear") {
+      setCommandOutput(null);
+      return;
+    }
 
     // Check if command matches a file in the tree
     const fileIndex = FILE_TREE.findIndex(
       (f) => f.command.toLowerCase() === trimmed
     );
     if (fileIndex !== -1) {
+      setCommandOutput(null);
       setSelectedFileIndex(fileIndex);
       setFocusedPanel("content");
       setMobileTab("content");
       return;
     }
 
-    // For non-file commands (help, whoami, sudo hire-panda), show in content panel
+    // For non-file commands (help, whoami, etc.), show in content panel
     const result = executeCommand(input, handleCommandRef.current, lang);
     if (result) {
+      setCommandOutput(result);
       setFocusedPanel("content");
       setMobileTab("content");
     }

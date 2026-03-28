@@ -9,7 +9,7 @@ export interface CommandOutput {
 
 const HelpOutput = ({ onCommandClick }: { onCommandClick?: (cmd: string) => void }) => {
   const commands = [
-    { cmd: "whoami", desc: "who is Panda Tseng" },
+    { cmd: "whoami", desc: "who is Howard Wang" },
     { cmd: "cat soul.md", desc: "about me, values, highlights" },
     { cmd: "cat experience.json", desc: "work experience" },
     { cmd: "ls projects/", desc: "side projects & initiatives" },
